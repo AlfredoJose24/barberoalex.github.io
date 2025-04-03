@@ -1,130 +1,248 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserva tu turno - Barbería</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hanalei+Fill&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        body {
-            background: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('Imagen de WhatsApp 2025-04-02 a las 15.22.35_7d623777.jpg') no-repeat center center/cover;
-            filter: blur(8px);
-            opacity: 0.5;
-            z-index: -1;
-        }
-        .reserva-container {
-            background: rgba(0, 0, 0, 0.85);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            color: white;
-        }
-        .reserva-container h1 {
-            font-family: 'Hanalei Fill', cursive;
-            font-size: 2.5rem;
-            color: #cfa12f;
-            margin-bottom: 15px;
-        }
-        .reserva-container input, .reserva-container select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: none;
-            font-size: 1rem;
-        }
-        .btn-reservar {
-            background: black;
-            color: white;
-            padding: 12px;
-            border: 1px solid white;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-        }
-        .btn-reservar:hover {
-            background: white;
-            color: black;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserva tu turno - Barbería</title>
+  <!-- Importa las fuentes: Hanalei Fill para el título y Poppins para el resto -->
+  <link href="https://fonts.googleapis.com/css2?family=Hanalei+Fill&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Flatpickr para el selector de fecha -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+    /* Establece Poppins como fuente principal para el contenido */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('Imagen de WhatsApp 2025-04-02 a las 15.22.35_7d623777.jpg') no-repeat center center/cover;
+      filter: blur(8px);
+      opacity: 0.5;
+      z-index: -1;
+    }
+    .reserva-container {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      color: white;
+    }
+    /* Título con Hanalei Fill */
+    .reserva-container h1 {
+      font-family: 'Hanalei Fill', cursive;
+      font-size: 2rem;
+      color: #cfa12f;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .nombre-input, .fecha-input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 20px;
+      border: none;
+      font-size: 1rem;
+      text-align: center;
+    }
+    .horarios {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .horario-item {
+      background: #222;
+      padding: 6px;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.3s;
+      border: 1px solid white;
+      font-weight: 400;
+    }
+    .horario-item:hover, .horario-seleccionado {
+      background: white;
+      color: black;
+    }
+    .ocupado {
+      background: gray !important;
+      color: black;
+      cursor: not-allowed;
+    }
+    .almuerzo {
+      background: #cfa12f;
+      color: black;
+      font-weight: bold;
+      grid-column: span 3;
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+    .btn-reservar {
+      background: black;
+      color: white;
+      padding: 8px;
+      border: 1px solid white;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      font-weight: 600;
+    }
+    .btn-reservar:hover {
+      background: white;
+      color: black;
+    }
+    .btn-volver {
+      margin-top: 10px;
+      display: inline-block;
+      background: #222;
+      color: #cfa12f;
+      padding: 6px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+    .btn-volver:hover {
+      background: #cfa12f;
+      color: black;
+    }
+    .fecha {
+      font-style: italic;
+      font-size: 0.8rem;
+      color: #cfa12f;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="background"></div>
-
-    <div class="reserva-container">
-        <h1>Reserva tu turno</h1>
-        <form>
-            <input type="text" id="nombre" placeholder="Tu Nombre" required>
-            <select id="hora" required></select>
-            <button type="button" class="btn-reservar" onclick="enviarWhatsApp()">Reservar</button>
-        </form>
-    </div>
-
-    <script>
-        let horariosDisponibles = [
-            "10:00 AM", "11:00 AM", "12:00 PM",
-            "02:00 PM", "03:00 PM", "04:00 PM"
-        ];
-
-        let horariosReservados = JSON.parse(localStorage.getItem("horariosReservados")) || [];
-        let horariosActuales = horariosDisponibles.filter(hora => !horariosReservados.includes(hora));
-
-        function cargarHorarios() {
-            let selectHoras = document.getElementById("hora");
-            selectHoras.innerHTML = "";
-            horariosActuales.forEach(hora => {
-                let option = document.createElement("option");
-                option.value = hora;
-                option.textContent = hora;
-                selectHoras.appendChild(option);
-            });
+  <div class="background"></div>
+  <div class="reserva-container">
+    <h1>Reserva tu turno</h1>
+    <input type="text" id="nombre" class="nombre-input" placeholder="Tu Nombre" required>
+    <input type="text" id="fecha" class="fecha-input" placeholder="Selecciona la fecha" required>
+    <div class="horarios" id="horarios-container"></div>
+    <button type="button" class="btn-reservar" onclick="enviarWhatsApp()">Reservar</button>
+    <a href="index.htm" class="btn-volver">Regresar al inicio</a>
+    <p class="fecha" id="fechaActual"></p>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    // Horarios definidos para el día
+    let horariosDisponibles = [
+      "7:00 AM", "7:30 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM",
+      "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "ALMUERZO",
+      "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM",
+      "5:00 PM", "5:30 PM", "6:00 PM"
+    ];
+    
+    let horarioSeleccionado = null;
+    let fechaSeleccionada = null;
+    // Guardamos reservas por fecha en localStorage, en formato { fecha: [horarios] }
+    let reservas = JSON.parse(localStorage.getItem("reservas")) || {};
+    
+    function cargarHorarios() {
+      let contenedor = document.getElementById("horarios-container");
+      contenedor.innerHTML = "";
+      let fecha = document.getElementById("fecha").value;
+    
+      horariosDisponibles.forEach(hora => {
+        let div = document.createElement("div");
+        div.classList.add("horario-item");
+        div.textContent = hora;
+    
+        if (hora === "ALMUERZO") {
+          div.classList.add("almuerzo");
+        } else {
+          if (reservas[fecha] && reservas[fecha].includes(hora)) {
+            div.classList.add("ocupado");
+          } else {
+            div.onclick = () => seleccionarHora(div, hora);
+          }
         }
-
-        function enviarWhatsApp() {
-            let nombre = document.getElementById("nombre").value;
-            let horaSeleccionada = document.getElementById("hora").value;
-
-            if (horariosReservados.includes(horaSeleccionada)) {
-                alert("Este horario ya ha sido reservado. Elige otro.");
-                return;
-            }
-
-            horariosReservados.push(horaSeleccionada);
-            localStorage.setItem("horariosReservados", JSON.stringify(horariosReservados));
-            horariosActuales = horariosDisponibles.filter(hora => !horariosReservados.includes(hora));
-            cargarHorarios();
-
-            let numeroWhatsApp = "573046592444";
-            let mensaje = `Hola, quiero reservar una cita.%0A🔹 Nombre: ${nombre}%0A🕒 Hora: ${horaSeleccionada}`;
-            window.location.href = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`;
-        }
-
+        contenedor.appendChild(div);
+      });
+    }
+    
+    function seleccionarHora(elemento, hora) {
+      if (reservas[fechaSeleccionada] && reservas[fechaSeleccionada].includes(hora)) {
+        alert("Este horario ya ha sido reservado. Elige otro.");
+        return;
+      }
+      document.querySelectorAll(".horario-item").forEach(item => {
+        item.classList.remove("horario-seleccionado");
+      });
+      elemento.classList.add("horario-seleccionado");
+      horarioSeleccionado = hora;
+    }
+    
+    function enviarWhatsApp() {
+      let nombre = document.getElementById("nombre").value;
+      fechaSeleccionada = document.getElementById("fecha").value;
+    
+      if (!nombre || !fechaSeleccionada || !horarioSeleccionado) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+    
+      if (!reservas[fechaSeleccionada]) {
+        reservas[fechaSeleccionada] = [];
+      }
+    
+      if (reservas[fechaSeleccionada].includes(horarioSeleccionado)) {
+        alert("Este horario ya ha sido reservado. Elige otro.");
+        return;
+      }
+    
+      reservas[fechaSeleccionada].push(horarioSeleccionado);
+      localStorage.setItem("reservas", JSON.stringify(reservas));
+    
+      let numeroWhatsApp = "573046592444";
+      let mensaje = `Hola, quiero reservar una cita.%0A🔹 Nombre: ${nombre}%0A📅 Fecha: ${fechaSeleccionada}%0A🕒 Hora: ${horarioSeleccionado}`;
+      window.location.href = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`;
+    
+      cargarHorarios();
+    }
+    
+    flatpickr("#fecha", {
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      locale: "es",
+      onChange: function() {
+        fechaSeleccionada = document.getElementById("fecha").value;
         cargarHorarios();
-    </script>
-
+      }
+    });
+    
+    function mostrarFechaActual() {
+      let fecha = new Date();
+      let opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById("fechaActual").textContent = fecha.toLocaleDateString("es-ES", opciones);
+    }
+    
+    cargarHorarios();
+    mostrarFechaActual();
+  </script>
 </body>
 </html>
