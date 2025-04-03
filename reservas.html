@@ -69,17 +69,6 @@
             background: white;
             color: black;
         }
-        .btn-volver {
-            margin-top: 15px;
-            display: inline-block;
-            color: #cfa12f;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-        .btn-volver:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -88,31 +77,25 @@
 
     <div class="reserva-container">
         <h1>Reserva tu turno</h1>
-        <form onsubmit="enviarWhatsApp(event)">
+        <form>
             <input type="text" id="nombre" placeholder="Tu Nombre" required>
             <select id="hora" required></select>
-            <button type="submit" class="btn-reservar">Reservar</button>
+            <button type="button" class="btn-reservar" onclick="enviarWhatsApp()">Reservar</button>
         </form>
-        <a href="index.html" class="btn-volver">⬅ Volver al inicio</a>
     </div>
 
     <script>
-        // Horarios disponibles inicialmente
         let horariosDisponibles = [
             "10:00 AM", "11:00 AM", "12:00 PM",
             "02:00 PM", "03:00 PM", "04:00 PM"
         ];
 
-        // Cargar horarios guardados en localStorage si existen
         let horariosReservados = JSON.parse(localStorage.getItem("horariosReservados")) || [];
-
-        // Filtrar horarios disponibles
         let horariosActuales = horariosDisponibles.filter(hora => !horariosReservados.includes(hora));
 
-        // Rellenar el select con los horarios disponibles
         function cargarHorarios() {
             let selectHoras = document.getElementById("hora");
-            selectHoras.innerHTML = ""; // Limpiar opciones
+            selectHoras.innerHTML = "";
             horariosActuales.forEach(hora => {
                 let option = document.createElement("option");
                 option.value = hora;
@@ -121,37 +104,25 @@
             });
         }
 
-        // Enviar reserva a WhatsApp y actualizar horarios
-        function enviarWhatsApp(event) {
-            event.preventDefault();
-
+        function enviarWhatsApp() {
             let nombre = document.getElementById("nombre").value;
             let horaSeleccionada = document.getElementById("hora").value;
 
-            // Verificar si ya está reservada
             if (horariosReservados.includes(horaSeleccionada)) {
                 alert("Este horario ya ha sido reservado. Elige otro.");
                 return;
             }
 
-            // Guardar la hora como reservada en localStorage
             horariosReservados.push(horaSeleccionada);
             localStorage.setItem("horariosReservados", JSON.stringify(horariosReservados));
-
-            // Actualizar horarios disponibles
             horariosActuales = horariosDisponibles.filter(hora => !horariosReservados.includes(hora));
-
-            // Recargar la lista de horarios en el select
             cargarHorarios();
 
-            let numeroWhatsApp = "573046592444"; // Número del barbero
+            let numeroWhatsApp = "573046592444";
             let mensaje = `Hola, quiero reservar una cita.%0A🔹 Nombre: ${nombre}%0A🕒 Hora: ${horaSeleccionada}`;
-
-            // Redirigir a WhatsApp
             window.location.href = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensaje}`;
         }
 
-        // Cargar horarios al abrir la página
         cargarHorarios();
     </script>
 
